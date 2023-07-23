@@ -29,7 +29,6 @@ const PlayersSetup = ({ hdlStartGame, playersList, setPlayersList }) => {
 
   return (
     <section className="h-full grid content-center gap-8">
-    {/* <section className="flex flex-col justify-center items-center gap-4"> */}
       <h1 className="text-[40px] font-bold text-center">Welcome to 10.000</h1>
       <p className="text-lg text-slate-700 text-center">
         You need to choose a player name and a color. Then click over the ADD

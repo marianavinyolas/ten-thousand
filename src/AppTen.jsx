@@ -1,38 +1,53 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Player from "./Player";
-
-const INITIAL_VALUES = {
-  Adela: 0,
-  Cecilia: 0,
-  Mariana: 0,
-  Martin: 0,
-  Martina: 0,
-  Patricia: 0,
-  Ruben: 0,
-  Valentina: 0,
-}
-
-const INITIAL_PLAYERS = [
-  { name: "Adela", color: "red"},
-  { name: "Cecilia", color: "black"},
-  { name: "Mariana", color: "blue"},
-  { name: "Martin", color: "grey"},
-  { name: "Martina", color: "deeppink"},
-  { name: "Patricia", color: "coral"},
-  { name: "Ruben", color: "darkcyan"},
-  { name: "Valentina", color: "blueviolet"},
-]
+import PlayersSetup from "./PlayersSetup";
+import Confetti from "react-confetti";
 
 const App = () => {
-  const [initialValue, setInitialValue] = useState(INITIAL_VALUES);
-  const [score, setScore] = useState(INITIAL_VALUES);
-  const [players, setPlayers] = useState(INITIAL_PLAYERS);
+  const [initialValue, setInitialValue] = useState({});
+  const [score, setScore] = useState({});
+  const [reset, setReset] = useState(false);
+
+  const [playersList, setPlayersList] = useState([]);
+  const [gameStatus, setGameStatus] = useState("setup");
+  const [winner, setWinner] = useState({ name: "" });
+
+  // Confetti effect resize
+  const [confetiPieces, setConfetiPieces] = useState(200);
+  const [size, setSize] = useState({
+    x: window.innerWidth,
+    y: window.innerHeight,
+  });
+  const updateSize = () =>
+    setSize({
+      x: window.innerWidth,
+      y: window.innerHeight,
+    });
+  useEffect(() => (window.onresize = updateSize), []);
 
   useEffect(() => {
-  
-  }, [players])
-  
+    const winningPlayer = Object.keys(score).find(
+      (playerName) => score[playerName] === 10000
+    );
+    if (winningPlayer) {
+      setWinner({ name: winningPlayer });
+      setGameStatus("winner");
+      setTimeout(() => {
+        setConfetiPieces(0);
+      }, 10000);
+    }
+  }, [score]);
+
+  useEffect(() => {
+    const initialState = {};
+
+    playersList.forEach((player) => {
+      initialState[player.name] = 0;
+    });
+    setScore(initialState);
+    setInitialValue(initialState);
+  }, [playersList, reset]);
 
   const hdlClick = (name, value) => {
     let currentValue = score[name];
@@ -46,78 +61,93 @@ const App = () => {
     setInitialValue((prevState) => ({ ...prevState, [e.target.name]: points }));
   };
   const hdlDelete = (name) => {
-    let currentPlayers = players.filter(item => item.name !== name)
-    setPlayers(currentPlayers);
+    let currentPlayers = playersList.filter((item) => item.name !== name);
+    setPlayersList(currentPlayers);
   };
-  const handleReset = () => {
-    setScore(INITIAL_VALUES);
-    setPlayers(INITIAL_PLAYERS)
-  };
-  return (
-    <div className="w-full sm:w-1/2  flex flex-col gap-y-5 p-5 mx-auto">
-      <section className="flex flex-col items-center gap-y-5">
-        {players.map((player, idx) => (
-          <Player
-            key={idx}
-            name={player.name}
-            initialValue={initialValue[player.name]}
-            hdlValue={hdlValue}
-            hdlClick={hdlClick}
-            score={score[player.name]}
-            color={player.color}
-            hdlDelete={hdlDelete}
-          />
-        ))}
-      </section>
-      {score.Adela === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-red-500">
-          ADELA gaanasteee!!!!
-        </h1>
-      )}
-      {score.Cecilia === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-black">
-          CECILIA gaanasteee!!!!
-        </h1>
-      )}
-      {score.Mariana === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-blue-500">
-          MARIANA gaanasteee!!!!
-        </h1>
-      )}
-      {score.Martin === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-zinc-500">
-          MARTIN gaanasteee!!!!
-        </h1>
-      )}
-      {score.Martina === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-pink-500">
-          MARTINA gaanasteee!!!!
-        </h1>
-      )}
-      {score.Patricia === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-orange-500">
-          PATRICIA gaanasteee!!!!
-        </h1>
-      )}
-      {score.Ruben === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-sky-500">
-          RUBEN gaanasteee!!!!
-        </h1>
-      )}
-      {score.Valentina === 10000 && (
-        <h1 className="text-2xl text-center font-bold text-purple-500">
-          VALENTINA gaanasteee!!!!
-        </h1>
-      )}
 
-      <button
-        onClick={handleReset}
-        className="border border-black bg-slate-100 px-6 py-2 rounded mt-10"
-      >
-        Reset
-      </button>
+  const hdlStartGame = () => {
+    setGameStatus("playing");
+  };
+
+  const hdlRestart = () => {
+    setScore({});
+    setReset(!reset);
+    setGameStatus("playing");
+  };
+  const hdlReset = () => {
+    setScore({});
+    setGameStatus("setup");
+    setPlayersList([]);
+  };
+
+  return (
+    <div className="w-full h-screen sm:w-[80%] md:w-[70%]  flex flex-col gap-y-5 p-5 mx-auto">
+      {gameStatus === "setup" && (
+        <PlayersSetup {...{ playersList, setPlayersList, hdlStartGame }} />
+      )}
+      {gameStatus === "playing" && (
+        <main className="h-full grid content-center">
+          <h1 className="text-4xl font-bold text-center">Welcome to 10.000</h1>
+          <section className="flex flex-col items-center gap-y-5 py-10">
+            {playersList.map((player, idx) => (
+              <Player
+                key={idx}
+                name={player.name}
+                initialValue={initialValue[player.name]}
+                hdlValue={hdlValue}
+                hdlClick={hdlClick}
+                score={score[player.name]}
+                color={player.color}
+                hdlDelete={hdlDelete}
+              />
+            ))}
+          </section>
+          <section className="w-full flex justify-between">
+            <button
+              onClick={hdlReset}
+              className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
+            >
+              Reset players
+            </button>
+            <button
+              onClick={hdlRestart}
+              className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
+            >
+              Reset scores
+            </button>
+          </section>
+        </main>
+      )}
+      {gameStatus === "winner" && (
+        <section className="h-full grid content-center">
+          <Confetti
+            width={size.x}
+            height={size.y}
+            numberOfPieces={confetiPieces}
+          />
+          <article className="flex flex-col items-center gap-8 pb-32">
+            <h1 className="text-3xl animate-pulse">Congratulations!</h1>
+            <h1 className="text-5xl">{winner.name}</h1>
+            <h1 className="text-3xl animate-pulse">You win!!</h1>
+          </article>
+          <section className="w-full flex justify-between">
+            <button
+              onClick={hdlReset}
+              className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
+            >
+              Reset players
+            </button>
+            <button
+              onClick={hdlRestart}
+              className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
+            >
+              Play again
+            </button>
+          </section>
+        </section>
+      )}
     </div>
   );
-}
+};
 
 export default App;
