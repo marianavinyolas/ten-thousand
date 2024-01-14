@@ -13,7 +13,7 @@ const PlayersSetup = ({ hdlStartGame, playersList, setPlayersList }) => {
       setIsLoading(false);
       setColor("#e1e1e1");
       setName("");
-      setPlayersList((prev) => [...prev, { name, color }]);
+      setPlayersList((prev) => [...prev, { name, color, score: 0 }]);
     }, 1000);
   };
 
