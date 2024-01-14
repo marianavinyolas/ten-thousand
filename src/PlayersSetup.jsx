@@ -75,11 +75,11 @@ const PlayersSetup = ({ hdlStartGame, playersList, setPlayersList }) => {
             <div
               key={name}
               className={`flex border-2 rounded text-center`}
-              style={{ backgroundColor: `${color}` }}
+              style={{ backgroundColor: `${color}`, borderColor: `${color}` }}
             >
               <span
                 className={`text-white font-bold flex-none w-32 p-2`}
-                style={{ backgroundColor: `${color}` }}
+                // style={{ backgroundColor: `${color}` }}
               >{`PLAYER ${idx + 1}`}</span>
               <p className="flex-1 p-2 uppercase font-bold">{name}</p>
             </div>
