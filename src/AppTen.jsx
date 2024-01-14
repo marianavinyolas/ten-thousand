@@ -125,6 +125,7 @@ const App = () => {
                   score={player.score}
                   color={player.color}
                   hdlDelete={hdlDelete}
+                  index={idx}
                 />
               ))}
             </section>
