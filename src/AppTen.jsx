@@ -164,12 +164,12 @@ const App = () => {
               >
                 Play new game
               </button>
-              <button
+              {playersList.length > 2 && <button
                 onClick={hdlContinue}
                 className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
               >
                 Continue playing
-              </button>
+              </button>}
             </section>
           </section>
         )}
