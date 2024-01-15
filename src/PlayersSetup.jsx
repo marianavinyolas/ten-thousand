@@ -80,7 +80,7 @@ const PlayersSetup = ({ hdlStartGame, playersList, setPlayersList }) => {
               <span
                 className={`text-white font-bold flex-none w-32 p-2`}
               >{`PLAYER ${idx + 1}`}</span>
-              <p className="flex-1 p-2 uppercase font-bold">{name}</p>
+              <p className="flex-1 p-2 uppercase font-bold bg-white">{name}</p>
             </div>
           ))}
       </article>
