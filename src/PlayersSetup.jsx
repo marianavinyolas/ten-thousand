@@ -25,9 +25,9 @@ const PlayersSetup = ({ hdlStartGame, playersList, setPlayersList }) => {
   };
 
   return (
-    <section className="w-2/3 h-full grid content-center gap-8 py-10 mx-auto">
+    <section className="w-[80%] h-full flex flex-col gap-8 py-10 mx-auto">
       <h1 className="text-lg font-bold text-center">Welcome to 10.000</h1>
-      <p className="text-lg text-slate-700 text-center">
+      <p className="text-sm sm:text-base text-slate-700 text-center">
         You need to choose a player name and a color. Then click over the ADD
         PLAYER button. At least two players are needed to start the game.
       </p>
@@ -55,7 +55,7 @@ const PlayersSetup = ({ hdlStartGame, playersList, setPlayersList }) => {
       <article className="py-4 w-full">
         <button
           onClick={() => hdlAdd()}
-          className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded w-full disabled:text-slate-400 disabled:cursor-not-allowed"
+          className="bg-black shadow-md text-white hover:text-slate-200  px-6 py-2 rounded w-full disabled:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100"
           disabled={!name || !color}
         >
           {isLoading ? (
@@ -88,7 +88,7 @@ const PlayersSetup = ({ hdlStartGame, playersList, setPlayersList }) => {
         <article className="py-4 w-full">
           <button
             onClick={hdlStartGame}
-            className="border border-black/10 shadow-md bg-slate-100 hover:text-slate-600 px-6 py-2 rounded w-full disabled:text-slate-400 disabled:cursor-not-allowed"
+            className="bg-black shadow-md text-white hover:text-slate-200 px-6 py-2 rounded w-full disabled:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100"
             disabled={playersList.length < 2}
           >
             START!{" "}

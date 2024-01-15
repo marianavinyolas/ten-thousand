@@ -3,6 +3,8 @@ import "./App.css";
 import Player from "./Player";
 import PlayersSetup from "./PlayersSetup";
 import Confetti from "react-confetti";
+import { faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const App = () => {
   const [initialValue, setInitialValue] = useState({});
@@ -104,17 +106,17 @@ const App = () => {
   }
 
   return (
-    <main className="w-full h-screen flex flex-col justify-center py-4">
-      <div className="w-[98%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] flex flex-col gap-y-5 p-5 mx-auto border border-neutral-300 rounded-md shadow-lg">
+    <main className="w-full h-screen flex flex-col justify-center py-4 bg-black">
+      <div className="w-[95%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] flex flex-col gap-y-5 p-4 mx-auto border border-neutral-300 rounded-md shadow-lg bg-white overflow-y-auto">
         {gameStatus === "setup" && (
           <PlayersSetup {...{ playersList, setPlayersList, hdlStartGame }} />
         )}
         {gameStatus === "playing" && (
-          <main className="h-full grid content-center">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center">
+          <main className="h-full flex flex-col py-4">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center py-4">
               Welcome to 10.000
             </h1>
-            <section className="flex flex-col items-center gap-y-5 py-10">
+            <section className="flex flex-col items-center gap-y-5 py-4">
               {playersList.map((player, idx) => (
                 <Player
                   key={idx}
@@ -129,7 +131,7 @@ const App = () => {
                 />
               ))}
             </section>
-            <section className="w-full flex justify-between">
+            <section className="w-full flex justify-between py-4">
               <button
                 onClick={hdlResetPlayers}
                 className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
@@ -146,7 +148,7 @@ const App = () => {
           </main>
         )}
         {gameStatus === "winner" && (
-          <section className="h-full grid content-center">
+          <section className="flex flex-col justify-center">
             <Confetti
               width={size.x}
               height={size.y}
@@ -154,19 +156,20 @@ const App = () => {
             />
             <article className="flex flex-col items-center gap-8 py-24">
               <h1 className="text-3xl animate-pulse">Congratulations!</h1>
-              <h1 className={`text-5xl`} style={{color: `${winner.color}`}}>{winner.name}</h1>
+              <h1 className={`text-5xl uppercase`} style={{color: `${winner.color}`}}>{winner.name}</h1>
               <h1 className="text-3xl animate-pulse">You win!!</h1>
+              <FontAwesomeIcon icon={faTrophy} size="4x" style={{color: `${winner.color}`}}/>
             </article>
             <section className="w-full flex justify-between">
               <button
                 onClick={hdlPlayNewGame}
-                className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
+                className="bg-black shadow-md text-white hover:text-slate-200 px-6 py-2 rounded mt-10"
               >
                 Play new game
               </button>
               {playersList.length > 2 && <button
                 onClick={hdlContinue}
-                className="border border-black/10 shadow-md bg-slate-100 px-6 py-2 rounded mt-10"
+                className="bg-black shadow-md text-white hover:text-slate-200 px-6 py-2 rounded mt-10"
               >
                 Continue playing
               </button>}
